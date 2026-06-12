@@ -18,7 +18,6 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/sync", tags=["sync"])
 
 # Firebase Admin is initialized in main.py
-db = fb_firestore.client()
 
 
 class DiagnosisSync(BaseModel):
