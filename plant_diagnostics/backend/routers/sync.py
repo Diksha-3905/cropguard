@@ -55,7 +55,7 @@ def merge_clocks(a: dict, b: dict) -> dict:
 @router.post("/")
 async def sync_diagnoses(body: SyncRequest):
     results = []
-    collection = db.collection("diagnoses")
+    collection = get_db().collection("diagnoses")
 
     for item in body.diagnoses:
         try:
