@@ -1,0 +1,74 @@
+name: plant_diagnostics
+description: Real-time multimodal plant disease diagnostics assistant with offline-first sync.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # HTTP & API
+  dio: ^5.4.0
+  http: ^1.2.0
+
+  # Camera & Image
+  image_picker: ^1.0.7
+  camera: ^0.10.5+9
+  flutter_image_compress: ^2.1.0
+
+  # Local storage (offline queue)
+  drift: ^2.15.0
+  drift_flutter: ^0.1.0
+  sqlite3_flutter_libs: ^0.5.19
+  path_provider: ^2.1.2
+  path: ^1.9.0
+  shared_preferences: ^2.2.2
+
+  # Supabase
+  supabase_flutter: ^2.3.4
+
+  # Audio (STT/TTS)
+  record: ^5.0.4
+  audioplayers: ^6.0.0
+  just_audio: ^0.9.36
+  permission_handler: ^11.3.0
+
+  # Networking & Connectivity
+  connectivity_plus: ^5.0.2
+  internet_connection_checker_plus: ^2.0.0
+
+  # State management
+  flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.4
+
+  # UI
+  flutter_spinkit: ^5.2.0
+  lottie: ^3.1.0
+  cached_network_image: ^3.3.1
+  gap: ^3.0.1
+  flutter_animate: ^4.5.0
+
+  # Utils
+  uuid: ^4.3.3
+  intl: ^0.19.0
+  logger: ^2.2.0
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.9.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+  build_runner: ^2.4.8
+  freezed: ^2.4.7
+  json_serializable: ^6.7.1
+  riverpod_generator: ^2.3.9
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/animations/
+    - assets/images/
