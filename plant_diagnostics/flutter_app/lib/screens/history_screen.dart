@@ -7,28 +7,17 @@ class HistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: DatabaseService.instance.db.getAllDiagnoses(),
+    return FutureBuilder<List<DiagnosisRow>>(
+      future: DatabaseService.instance.getAllDiagnoses(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
-
         if (snapshot.hasError) {
-          return Center(
-            child: Text(
-              'Failed to load history: ${snapshot.error}',
-              textAlign: TextAlign.center,
-            ),
-          );
+          return Center(child: Text('Failed to load history: ${snapshot.error}'));
         }
-
         final diagnoses = snapshot.data ?? [];
-
-        if (diagnoses.isEmpty) {
-          return _EmptyHistory();
-        }
-
+        if (diagnoses.isEmpty) return _EmptyHistory();
         return ListView.separated(
           padding: const EdgeInsets.all(16),
           itemCount: diagnoses.length,
@@ -57,61 +46,43 @@ class _DiagnosisCard extends StatelessWidget {
   final bool isOod;
 
   const _DiagnosisCard({
-    required this.diseaseName,
-    required this.confidence,
-    required this.status,
-    required this.createdAt,
-    required this.isOod,
+    required this.diseaseName, required this.confidence,
+    required this.status, required this.createdAt, required this.isOod,
   });
 
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-
     final statusColor = switch (status) {
       'synced' => Colors.green,
       'pending' => Colors.orange,
       'failed' => cs.error,
       _ => cs.outline,
     };
-
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Row(
           children: [
             Container(
-              width: 44,
-              height: 44,
+              width: 44, height: 44,
               decoration: BoxDecoration(
-                color: isOod
-                    ? cs.errorContainer
-                    : cs.primaryContainer,
+                color: isOod ? cs.errorContainer : cs.primaryContainer,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Icon(
-                isOod ? Icons.block : Icons.eco_rounded,
-                color: isOod ? cs.error : cs.primary,
-              ),
+              child: Icon(isOod ? Icons.block : Icons.eco_rounded,
+                  color: isOod ? cs.error : cs.primary),
             ),
             const Gap(12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    diseaseName,
-                    style: const TextStyle(fontWeight: FontWeight.w600),
-                  ),
+                  Text(diseaseName, style: const TextStyle(fontWeight: FontWeight.w600)),
                   const Gap(4),
                   Text(
-                    confidence != null
-                        ? 'Confidence: ${(confidence! * 100).toStringAsFixed(0)}%'
-                        : 'Confidence: —',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: cs.onSurface.withOpacity(0.6),
-                    ),
+                    confidence != null ? 'Confidence: ${(confidence! * 100).toStringAsFixed(0)}%' : 'Confidence: —',
+                    style: TextStyle(fontSize: 12, color: cs.onSurface.withOpacity(0.6)),
                   ),
                 ],
               ),
@@ -120,39 +91,22 @@ class _DiagnosisCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(
                     color: statusColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Text(
-                    status,
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: statusColor,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+                  child: Text(status, style: TextStyle(fontSize: 11, color: statusColor, fontWeight: FontWeight.w500)),
                 ),
                 const Gap(4),
-                Text(
-                  _formatDate(createdAt),
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: cs.onSurface.withOpacity(0.4),
-                  ),
-                ),
+                Text('${createdAt.day}/${createdAt.month}/${createdAt.year}',
+                    style: TextStyle(fontSize: 11, color: cs.onSurface.withOpacity(0.4))),
               ],
             ),
           ],
         ),
       ),
     );
-  }
-
-  String _formatDate(DateTime dt) {
-    return '${dt.day}/${dt.month}/${dt.year}';
   }
 }
 
@@ -164,13 +118,9 @@ class _EmptyHistory extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.history_rounded, size: 56,
-              color: cs.onSurface.withOpacity(0.3)),
+          Icon(Icons.history_rounded, size: 56, color: cs.onSurface.withOpacity(0.3)),
           const Gap(16),
-          Text(
-            'No diagnoses yet',
-            style: TextStyle(color: cs.onSurface.withOpacity(0.5)),
-          ),
+          Text('No diagnoses yet', style: TextStyle(color: cs.onSurface.withOpacity(0.5))),
         ],
       ),
     );

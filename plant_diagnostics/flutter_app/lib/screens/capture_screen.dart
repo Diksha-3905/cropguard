@@ -47,7 +47,7 @@ class _CaptureScreenState extends State<CaptureScreen> {
 
     // Check connectivity
     final connectivity = await Connectivity().checkConnectivity();
-    final hasNet = connectivity.any((r) => r != ConnectivityResult.none);
+    final hasNet = connectivity != ConnectivityResult.none;
 
     try {
       late DiagnosisResult result;

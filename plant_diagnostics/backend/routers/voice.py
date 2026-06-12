@@ -87,3 +87,23 @@ async def voice_ask(
         audio_b64 = None
 
     return {"transcript": transcript, "reply": reply_text, "audio_b64": audio_b64}
+
+
+@router.post("/ask-text")
+async def voice_ask_text(question: str = Form(...), diagnosis_id: str = Form(default="")):
+    """Text-based Q&A fallback (no audio input needed)."""
+    try:
+        ctx_str = "{}"
+        prompt = f"{VOICE_SYSTEM}\n\nUser question: {question}"
+        response = llm.generate_content(prompt)
+        reply_text = response.text.strip()
+    except Exception as e:
+        raise HTTPException(status_code=503, detail="AI service unavailable")
+
+    try:
+        audio_out = await synthesize_speech(reply_text)
+        audio_b64 = base64.b64encode(audio_out).decode() if audio_out else None
+    except Exception:
+        audio_b64 = None
+
+    return {"reply": reply_text, "audio_b64": audio_b64}
